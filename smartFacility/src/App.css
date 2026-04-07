@@ -1,0 +1,148 @@
+.page {
+  min-height: 100vh;
+  padding: 24px;
+  color: #243041;
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  background: linear-gradient(180deg, #f7fbff 0%, #eef4fb 100%);
+}
+
+.hero {
+  margin: 0 0 18px;
+  border: 1px solid #dce7f6;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(3px);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.heroAnim {
+  width: 84px;
+  min-width: 84px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 26px;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+h3 {
+  margin: 12px 0 8px;
+  font-size: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  border: 1px solid #dbe7f8;
+  border-radius: 12px;
+  padding: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(24, 57, 101, 0.06);
+  min-height: 350px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+input,
+select,
+button {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+button {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+button:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 280px;
+  overflow: auto;
+  font-size: 13px;
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e6f0ff;
+  color: #2355c6;
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+.pill.alert {
+  background: #fff0f3;
+  color: #cc2f58;
+}
+
+.miniBtn {
+  margin-left: 8px;
+  padding: 4px 7px;
+  font-size: 11px;
+  background: #e8f0ff;
+  color: #1f3d8f;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+@media (max-width: 1000px) {
+  .page {
+    padding: 14px;
+  }
+
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroAnim {
+    width: 64px;
+    min-width: 64px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

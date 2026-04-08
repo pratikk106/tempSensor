@@ -1,0 +1,87 @@
+{
+  "info": {
+    "name": "Smart Facility Backend",
+    "_postman_id": "f81d2940-58b0-4e88-8cd9-7615bf37e913",
+    "description": "Rules, events, and alerts API collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "apiKey", "value": "secret123" },
+    { "key": "ruleId", "value": "" },
+    { "key": "alertId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Rules - Create",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.id) pm.collectionVariables.set('ruleId', body.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"High Temperature\",\n  \"eventType\": \"temperature\",\n  \"definition\": {\n    \"operator\": \">\",\n    \"threshold\": 70,\n    \"window\": { \"type\": \"count\", \"value\": 3 },\n    \"action\": \"ALERT\"\n  },\n  \"isActive\": true\n}"
+        },
+        "url": "{{baseUrl}}/rules"
+      }
+    },
+    {
+      "name": "Rules - List",
+      "request": { "method": "GET", "url": "{{baseUrl}}/rules" }
+    },
+    {
+      "name": "Events - Ingest",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "x-api-key", "value": "{{apiKey}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": \"sensor-123\",\n  \"type\": \"temperature\",\n  \"value\": 78.4,\n  \"timestamp\": 1710000001\n}"
+        },
+        "url": "{{baseUrl}}/events"
+      }
+    },
+    {
+      "name": "Alerts - Create",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.id) pm.collectionVariables.set('alertId', body.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": \"sensor-123\",\n  \"ruleId\": \"manual-rule\",\n  \"message\": \"Manual alert\",\n  \"eventPayload\": {\n    \"type\": \"temperature\",\n    \"value\": 88.1,\n    \"source\": \"postman\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/alerts"
+      }
+    },
+    {
+      "name": "Alerts - List",
+      "request": { "method": "GET", "url": "{{baseUrl}}/alerts" }
+    }
+  ]
+}

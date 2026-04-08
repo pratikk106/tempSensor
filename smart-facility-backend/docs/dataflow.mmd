@@ -1,0 +1,41 @@
+flowchart TD
+  A[IoT Device] -->|HTTP POST /events| B[Ingestion Module]
+  B -->|Validate payload + API key| C[Redis Stream events:ingest]
+  B -->|Emit| R1[event.received]
+
+  C -->|Consumer Group XREADGROUP| D[Processor Worker]
+
+  D --> E{Dedup check\nRedis SET NX EX}
+  E -->|Duplicate| X1[ACK + Drop]
+  E -->|Unique| F{Ordering policy}
+  F -->|Stale delayed event| X2[Emit event.dropped + ACK]
+  F -->|Accept| G[Persist EventLog in PostgreSQL]
+
+  G --> H[Update Redis State]
+  H --> H1[Sorted Set readings]
+  H --> H2[Last seen timestamp]
+  H --> H3[Aggregates avg/max/spikes]
+
+  H --> I[Load active rules]
+  I --> J[Rule Engine JSON DSL]
+  J --> J1[Count window]
+  J --> J2[Time window]
+  J --> J3[Heartbeat missing]
+
+  J --> K{Rule matched?}
+  K -->|No| L[ACK stream event]
+  K -->|Yes| M[Actions Module]
+
+  M --> N[Create Alert in PostgreSQL]
+  M --> O[Webhook call retry 1s to 2s to 4s]
+  M --> P[Idempotency via dedupeKey]
+  N --> R2[Emit alert.created]
+  H2 --> R3[Emit device.status]
+
+  L --> R4[Emit event.processed]
+  D -->|Periodic check| J3
+
+  R1 --> UI[Frontend Dashboard]
+  R2 --> UI
+  R3 --> UI
+  R4 --> UI

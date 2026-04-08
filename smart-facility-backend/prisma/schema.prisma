@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Rule {
+  id         String   @id @default(cuid())
+  name       String
+  eventType  String
+  definition Json
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Alert {
+  id           String   @id @default(cuid())
+  deviceId     String
+  ruleId       String
+  message      String
+  eventPayload Json
+  dedupeKey    String   @unique
+  createdAt    DateTime @default(now())
+}
+
+model EventLog {
+  id         String   @id @default(cuid())
+  deviceId   String
+  eventType  String
+  value      Float
+  timestamp  BigInt
+  streamId   String?  @unique
+  createdAt  DateTime @default(now())
+}
